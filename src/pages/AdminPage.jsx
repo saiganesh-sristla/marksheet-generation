@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AdminPage = () => {
+    const navigate = useNavigate();
   const [studentData, setStudentData] = useState({
     name: "",
     prn: "",
@@ -169,6 +171,7 @@ const AdminPage = () => {
     setTimeout(() => {
       localStorage.setItem(studentData.prn, JSON.stringify(studentData));
       alert("Marksheet saved successfully!");
+      navigate('/student')
     }, 100);
   };
 
