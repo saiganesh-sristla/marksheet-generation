@@ -43,6 +43,7 @@ const StudentPage = () => {
 
 // Function to calculate total marks, SGPA, CGPA, etc.
 function calculateResults(student) {
+  console.log(student)
   let totalMarksObtained = 0;
   let totalCredits = 0;
   let totalGradePoints = 0;
@@ -81,12 +82,12 @@ function calculateResults(student) {
   
   // Set result status
   const allPassed = student.subjects.every(subject => 
-    parseInt(subject.theoryObt) >= subject.theoryMin && 
-    parseInt(subject.internalObt) >= subject.internalMin &&
-    parseInt(subject.practicalObt) >= subject.practicalMin &&
-    parseInt(subject.practicalInternalObt) >= subject.practicalInternalMin
+    parseInt(subject.theoryObt) >= parseInt(subject.theoryMin) && 
+    parseInt(subject.internalObt) >= parseInt(subject.internalMin) &&
+    parseInt(subject.practicalObt) >= parseInt(subject.practicalMin) &&
+    parseInt(subject.practicalInternalObt) >= parseInt(subject.practicalInternalMin)
   );
-
+  console.log(allPassed)
   const remarks = allPassed ? "PASS" : "FAIL";
 
   // Return updated student data

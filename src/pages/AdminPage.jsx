@@ -2,67 +2,631 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AdminPage = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  // All semesters data
+  const semestersData = {
+    I: {
+      programme: "BACHELOR OF SCIENCE – INFORMATION TECHNOLOGY",
+      semester: "I",
+      subjects: [
+        {
+          code: "BIT101",
+          title: "COMPUTER ORGANIZATION AND ARCHITECTURE",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT1P1",
+          practicalTitle: "COMPUTER ORGANIZATION AND ARCHITECTURE-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT102",
+          title: "PROGRAMMING IN C",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT1P2",
+          practicalTitle: "PROGRAMMING IN C-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT103",
+          title: "DATABASE MANAGEMENT SYSTEMS",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT1P3",
+          practicalTitle: "DATABASE MANAGEMENT SYSTEMS-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT104",
+          title: "MATHEMATICS FOR COMPUTING",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT1P4",
+          practicalTitle: "MATHEMATICS FOR COMPUTING-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT105",
+          title: "DIGITAL SYSTEMS",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT1P5",
+          practicalTitle: "DIGITAL SYSTEMS-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+      ],
+    },
+    II: {
+      programme: "BACHELOR OF SCIENCE – INFORMATION TECHNOLOGY",
+      semester: "II",
+      subjects: [
+        {
+          code: "BIT201",
+          title: "OBJECT ORIENTED PROGRAMMING WITH C++",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT2P1",
+          practicalTitle: "OBJECT ORIENTED PROGRAMMING WITH C++-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT202",
+          title: "MICROPROCESSOR ARCHITECTURE",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT2P2",
+          practicalTitle: "MICROPROCESSOR ARCHITECTURE-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT203",
+          title: "WEB PROGRAMMING",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT2P3",
+          practicalTitle: "WEB PROGRAMMING-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT204",
+          title: "DISCRETE MATHEMATICS",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT2P4",
+          practicalTitle: "DISCRETE MATHEMATICS-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT205",
+          title: "GREEN COMPUTING",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT2P5",
+          practicalTitle: "GREEN COMPUTING-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+      ],
+    },
+    III: {
+      programme: "BACHELOR OF SCIENCE – INFORMATION TECHNOLOGY",
+      semester: "III",
+      subjects: [
+        {
+          code: "BIT301",
+          title: "DATA STRUCTURES AND ALGORITHMS",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT3P1",
+          practicalTitle: "DATA STRUCTURES AND ALGORITHMS-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT302",
+          title: "COMPUTER NETWORKS",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT3P2",
+          practicalTitle: "COMPUTER NETWORKS-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT303",
+          title: "OPERATING SYSTEMS",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT3P3",
+          practicalTitle: "OPERATING SYSTEMS-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT304",
+          title: "JAVA PROGRAMMING",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT3P4",
+          practicalTitle: "JAVA PROGRAMMING-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT305",
+          title: "SOFTWARE ENGINEERING",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT3P5",
+          practicalTitle: "SOFTWARE ENGINEERING-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+      ],
+    },
+    IV: {
+      programme: "BACHELOR OF SCIENCE – INFORMATION TECHNOLOGY",
+      semester: "IV",
+      subjects: [
+        {
+          code: "BIT401",
+          title: "PYTHON PROGRAMMING",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT4P1",
+          practicalTitle: "PYTHON PROGRAMMING-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT402",
+          title: "COMPUTER GRAPHICS",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT4P2",
+          practicalTitle: "COMPUTER GRAPHICS-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT403",
+          title: "ADVANCED DATABASE CONCEPTS",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT4P3",
+          practicalTitle: "ADVANCED DATABASE CONCEPTS-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT404",
+          title: "MOBILE APPLICATION DEVELOPMENT",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT4P4",
+          practicalTitle: "MOBILE APPLICATION DEVELOPMENT-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT405",
+          title: "IT SECURITY AND MANAGEMENT",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT4P5",
+          practicalTitle: "IT SECURITY AND MANAGEMENT-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+      ],
+    },
+    V: {
+      programme: "BACHELOR OF SCIENCE – INFORMATION TECHNOLOGY",
+      semester: "V",
+      subjects: [
+        {
+          code: "BIT501",
+          title: "ARTIFICIAL INTELLIGENCE",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT5P1",
+          practicalTitle: "ARTIFICIAL INTELLIGENCE-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT502",
+          title: "WEB TECHNOLOGIES",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT5P2",
+          practicalTitle: "WEB TECHNOLOGIES-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT503",
+          title: "INTERNET OF THINGS",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT5P3",
+          practicalTitle: "INTERNET OF THINGS-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT504",
+          title: "DATA SCIENCE",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT5P4",
+          practicalTitle: "DATA SCIENCE-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT505",
+          title: "CLOUD COMPUTING",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT5P5",
+          practicalTitle: "CLOUD COMPUTING-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+      ],
+    },
+    VI: {
+      programme: "BACHELOR OF SCIENCE – INFORMATION TECHNOLOGY",
+      semester: "VI",
+      subjects: [
+        {
+          code: "BIT601",
+          title: "DISTRIBUTED SYSTEMS",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT6P1",
+          practicalTitle: "DISTRIBUTED SYSTEMS-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT602",
+          title: "MACHINE LEARNING",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT6P2",
+          practicalTitle: "MACHINE LEARNING-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT603",
+          title: "BLOCKCHAIN TECHNOLOGY",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT6P3",
+          practicalTitle: "BLOCKCHAIN TECHNOLOGY-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT604",
+          title: "INFORMATION SECURITY",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT6P4",
+          practicalTitle: "INFORMATION SECURITY-PRACTICAL",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+        {
+          code: "BIT605",
+          title: "PROJECT WORK",
+          theoryMax: 60,
+          theoryMin: 24,
+          theoryObt: "",
+          internalMax: 40,
+          internalMin: 16,
+          internalObt: "",
+          practicalCode: "BIT6P5",
+          practicalTitle: "PROJECT WORK-IMPLEMENTATION",
+          practicalMax: 30,
+          practicalMin: 12,
+          practicalObt: "",
+          practicalInternalMax: 20,
+          practicalInternalMin: 8,
+          practicalInternalObt: "",
+          credits: 2,
+        },
+      ],
+    },
+  };
+
+  // State for selected semester
+  const [selectedSemester, setSelectedSemester] = useState("II");
+
+  // Initialize student data with the default semester (II)
   const [studentData, setStudentData] = useState({
     name: "",
     prn: "",
     studentPin: "",
     seatNo: "",
-    programme: "BACHELOR OF SCIENCE – INFORMATION TECHNOLOGY",
-    semester: "II",
+    programme: semestersData[selectedSemester].programme,
+    semester: semestersData[selectedSemester].semester,
     monthYear: "",
-    subjects: [
-      { 
-        code: "BIT201", 
-        title: "OBJECT ORIENTED PROGRAMMING WITH C++", 
-        theoryMax: 60, theoryMin: 24, theoryObt: "",
-        internalMax: 40, internalMin: 16, internalObt: "",
-        practicalCode: "BIT2P1", practicalTitle: "OBJECT ORIENTED PROGRAMMING WITH C++-PRACTICAL",
-        practicalMax: 30, practicalMin: 12, practicalObt: "",
-        practicalInternalMax: 20, practicalInternalMin: 8, practicalInternalObt: "",
-        credits: 2
-      },
-      { 
-        code: "BIT202", 
-        title: "MICROPROCESSOR ARCHITECTURE", 
-        theoryMax: 60, theoryMin: 24, theoryObt: "",
-        internalMax: 40, internalMin: 16, internalObt: "",
-        practicalCode: "BIT2P2", practicalTitle: "MICROPROCESSOR ARCHITECTURE-PRACTICAL",
-        practicalMax: 30, practicalMin: 12, practicalObt: "",
-        practicalInternalMax: 20, practicalInternalMin: 8, practicalInternalObt: "",
-        credits: 2
-      },
-      { 
-        code: "BIT203", 
-        title: "WEB PROGRAMMING", 
-        theoryMax: 60, theoryMin: 24, theoryObt: "",
-        internalMax: 40, internalMin: 16, internalObt: "",
-        practicalCode: "BIT2P3", practicalTitle: "WEB PROGRAMMING-PRACTICAL",
-        practicalMax: 30, practicalMin: 12, practicalObt: "",
-        practicalInternalMax: 20, practicalInternalMin: 8, practicalInternalObt: "",
-        credits: 2
-      },
-      { 
-        code: "BIT204", 
-        title: "DISCRETE MATHEMATICS", 
-        theoryMax: 60, theoryMin: 24, theoryObt: "",
-        internalMax: 40, internalMin: 16, internalObt: "",
-        practicalCode: "BIT2P4", practicalTitle: "DISCRETE MATHEMATICS-PRACTICAL",
-        practicalMax: 30, practicalMin: 12, practicalObt: "",
-        practicalInternalMax: 20, practicalInternalMin: 8, practicalInternalObt: "",
-        credits: 2
-      },
-      { 
-        code: "BIT205", 
-        title: "GREEN COMPUTING", 
-        theoryMax: 60, theoryMin: 24, theoryObt: "",
-        internalMax: 40, internalMin: 16, internalObt: "",
-        practicalCode: "BIT2P5", practicalTitle: "GREEN COMPUTING-PRACTICAL",
-        practicalMax: 30, practicalMin: 12, practicalObt: "",
-        practicalInternalMax: 20, practicalInternalMin: 8, practicalInternalObt: "",
-        credits: 2
-      },
-    ],
+    subjects: [...semestersData[selectedSemester].subjects],
     sgpa: 0,
     cgpa: 0,
     totalMarksMax: 750,
@@ -71,6 +635,25 @@ const AdminPage = () => {
     creditEarned: 0,
     remarks: "",
   });
+
+  // Handle semester change
+  const handleSemesterChange = (e) => {
+    const newSemester = e.target.value;
+    setSelectedSemester(newSemester);
+
+    setStudentData({
+      ...studentData,
+      programme: semestersData[newSemester].programme,
+      semester: semestersData[newSemester].semester,
+      subjects: [...semestersData[newSemester].subjects],
+      sgpa: 0,
+      cgpa: 0,
+      totalMarksObtained: 0,
+      icg: 0,
+      creditEarned: 0,
+      remarks: "",
+    });
+  };
 
   const handleInputChange = (e, index, field, isPractical = false) => {
     const newSubjects = [...studentData.subjects];
@@ -84,7 +667,7 @@ const AdminPage = () => {
 
   const getGradeAndPoints = (totalMarks, maxMarks) => {
     const percentage = (totalMarks / maxMarks) * 100;
-    
+
     if (percentage >= 75) return { grade: "A+", points: 9 };
     if (percentage >= 70) return { grade: "A", points: 8 };
     if (percentage >= 65) return { grade: "B+", points: 7 };
@@ -103,38 +686,49 @@ const AdminPage = () => {
     let totalICG = 0;
     let totalMarksObtained = 0;
     let allPassed = true;
-    
+
     const newSubjects = studentData.subjects.map((subject) => {
       // Theory calculations
       const theoryTotal = Number(subject.theoryObt) || 0;
       const internalTotal = Number(subject.internalObt) || 0;
       const theoryResult = theoryTotal + internalTotal;
-      const theoryGradeInfo = getGradeAndPoints(theoryResult, subject.theoryMax + subject.internalMax);
-      
+      const theoryGradeInfo = getGradeAndPoints(
+        theoryResult,
+        subject.theoryMax + subject.internalMax
+      );
+
       // Practical calculations
       const practicalTotal = Number(subject.practicalObt) || 0;
       const practicalInternalTotal = Number(subject.practicalInternalObt) || 0;
       const practicalResult = practicalTotal + practicalInternalTotal;
-      const practicalGradeInfo = getGradeAndPoints(practicalResult, subject.practicalMax + subject.practicalInternalMax);
-      
+      const practicalGradeInfo = getGradeAndPoints(
+        practicalResult,
+        subject.practicalMax + subject.practicalInternalMax
+      );
+
       // Check if passed both theory and practical
-      const theoryPassed = theoryTotal >= subject.theoryMin && internalTotal >= subject.internalMin;
-      const practicalPassed = practicalTotal >= subject.practicalMin && practicalInternalTotal >= subject.practicalInternalMin;
-      
+      const theoryPassed =
+        theoryTotal >= subject.theoryMin &&
+        internalTotal >= subject.internalMin;
+      const practicalPassed =
+        practicalTotal >= subject.practicalMin &&
+        practicalInternalTotal >= subject.practicalInternalMin;
+
       if (!theoryPassed || !practicalPassed) {
         allPassed = false;
       }
-      
+
       // Credits calculation
-      const gradePoints = (theoryGradeInfo.points + practicalGradeInfo.points) / 2;
+      const gradePoints =
+        (theoryGradeInfo.points + practicalGradeInfo.points) / 2;
       const creditPoints = gradePoints * subject.credits;
       totalCG += creditPoints;
       totalICG += subject.credits * 10; // Maximum possible CG
       totalCredits += subject.credits;
-      
+
       // Add to total marks obtained
       totalMarksObtained += theoryResult + practicalResult;
-      
+
       return {
         ...subject,
         theoryGrade: theoryGradeInfo.grade,
@@ -143,16 +737,19 @@ const AdminPage = () => {
         practicalPoints: practicalGradeInfo.points,
         creditPoints: creditPoints,
         theoryResult,
-        practicalResult
+        practicalResult,
       };
     });
-    
+
     const sgpa = totalCredits > 0 ? (totalCG / totalCredits).toFixed(2) : 0;
     const cgpa = sgpa; // For simplicity, CGPA = SGPA for this semester
     const icg = totalICG;
     const remarks = allPassed ? "SUCCESSFUL" : "UNSUCCESSFUL";
-    const percentageObtained = ((totalMarksObtained / studentData.totalMarksMax) * 100).toFixed(2);
-    
+    const percentageObtained = (
+      (totalMarksObtained / studentData.totalMarksMax) *
+      100
+    ).toFixed(2);
+
     setStudentData({
       ...studentData,
       subjects: newSubjects,
@@ -162,7 +759,7 @@ const AdminPage = () => {
       creditEarned: totalCredits * 2, // Each subject has 2 credits x 5 subjects = 10, and theory+practical = 20
       totalMarksObtained,
       remarks,
-      percentageObtained
+      percentageObtained,
     });
   };
 
@@ -171,11 +768,11 @@ const AdminPage = () => {
     setTimeout(() => {
       localStorage.setItem(studentData.prn, JSON.stringify(studentData));
       alert("Marksheet saved successfully!");
-      navigate('/student')
+      navigate("/student");
     }, 100);
   };
 
-  return (
+  return <>
     <div className="max-w-7xl mx-auto bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold mb-4 text-center">Admin - Generate Marksheet</h2>
       
@@ -191,12 +788,18 @@ const AdminPage = () => {
         </div>
         <div>
           <label className="block text-sm font-medium mb-1">Semester</label>
-          <input
-            type="text"
-            value={studentData.semester}
+          <select
+            value={selectedSemester}
+            onChange={handleSemesterChange}
             className="w-full p-2 border rounded"
-            onChange={(e) => setStudentData({ ...studentData, semester: e.target.value })}
-          />
+          >
+            <option value="I">Semester I</option>
+            <option value="II">Semester II</option>
+            <option value="III">Semester III</option>
+            <option value="IV">Semester IV</option>
+            <option value="V">Semester V</option>
+            <option value="VI">Semester VI</option>
+          </select>
         </div>
       </div>
       
@@ -359,7 +962,7 @@ const AdminPage = () => {
         </div>
       )}
     </div>
-  );
+  </>;
 };
 
 export default AdminPage;
