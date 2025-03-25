@@ -656,13 +656,34 @@ const AdminPage = () => {
   };
 
   const handleInputChange = (e, index, field, isPractical = false) => {
-    const newSubjects = [...studentData.subjects];
-    if (isPractical) {
-      newSubjects[index][`practical${field}`] = e.target.value;
-    } else {
-      newSubjects[index][field] = e.target.value;
+    const value = parseFloat(e.target.value);
+    
+    // Early return if value is negative or NaN
+    if (isNaN(value) || value < 0) {
+      e.target.value = "";
+      return;
     }
-    setStudentData({ ...studentData, subjects: newSubjects });
+    
+    // Get the maximum allowed marks for this field
+    let maxMarks;
+    if (field === "internalObt") maxMarks = studentData.subjects[index].internalMax;
+    else if (field === "theoryObt") maxMarks = studentData.subjects[index].theoryMax;
+    else if (field === "practicalInternalObt") maxMarks = studentData.subjects[index].practicalInternalMax;
+    else if (field === "practicalObt") maxMarks = studentData.subjects[index].practicalMax;
+    
+    // Ensure value doesn't exceed maximum
+    if (value > maxMarks) {
+      e.target.value = maxMarks;
+      return;
+    }
+    
+    // Update the studentData state if validation passes
+    const updatedSubjects = [...studentData.subjects];
+    updatedSubjects[index][field] = value;
+    setStudentData({
+      ...studentData,
+      subjects: updatedSubjects
+    });
   };
 
   const getGradeAndPoints = (totalMarks, maxMarks) => {
@@ -772,197 +793,229 @@ const AdminPage = () => {
     }, 100);
   };
 
+  const validateMarks = (e, maxMarks) => {
+    const value = parseFloat(e.target.value);
+    
+    // Check for negative values
+    if (value < 0) {
+      e.target.value = 0;
+      return;
+    }
+    
+    // Check for exceeding maximum marks
+    if (value > maxMarks) {
+      e.target.value = maxMarks;
+      return;
+    }
+  };
+
   return <>
-    <div className="max-w-7xl mx-auto bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold mb-4 text-center">Admin - Generate Marksheet</h2>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <div>
-          <label className="block text-sm font-medium mb-1">Programme</label>
-          <input
-            type="text"
-            value={studentData.programme}
-            className="w-full p-2 border rounded"
-            onChange={(e) => setStudentData({ ...studentData, programme: e.target.value })}
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Semester</label>
-          <select
-            value={selectedSemester}
-            onChange={handleSemesterChange}
-            className="w-full p-2 border rounded"
-          >
-            <option value="I">Semester I</option>
-            <option value="II">Semester II</option>
-            <option value="III">Semester III</option>
-            <option value="IV">Semester IV</option>
-            <option value="V">Semester V</option>
-            <option value="VI">Semester VI</option>
-          </select>
-        </div>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-        <div>
-          <label className="block text-sm font-medium mb-1">Student Name</label>
-          <input
-            type="text"
-            placeholder="Student Name"
-            className="w-full p-2 border rounded"
-            onChange={(e) => setStudentData({ ...studentData, name: e.target.value })}
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">PRN</label>
-          <input
-            type="text"
-            placeholder="PRN"
-            className="w-full p-2 border rounded"
-            onChange={(e) => setStudentData({ ...studentData, prn: e.target.value })}
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Student PIN</label>
-          <input
-            type="text"
-            placeholder="Student PIN"
-            className="w-full p-2 border rounded"
-            onChange={(e) => setStudentData({ ...studentData, studentPin: e.target.value })}
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Seat No.</label>
-          <input
-            type="text"
-            placeholder="Seat No."
-            className="w-full p-2 border rounded"
-            onChange={(e) => setStudentData({ ...studentData, seatNo: e.target.value })}
-          />
-        </div>
-      </div>
-      
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">Month & Year of Exam</label>
+  <div className="max-w-7xl mx-auto bg-white p-6 rounded-lg shadow-md">
+    <h2 className="text-2xl font-semibold mb-4 text-center">Admin - Generate Marksheet</h2>
+    
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div>
+        <label className="block text-sm font-medium mb-1">Programme</label>
         <input
           type="text"
-          placeholder="e.g. MAR-23"
+          value={studentData.programme}
           className="w-full p-2 border rounded"
-          onChange={(e) => setStudentData({ ...studentData, monthYear: e.target.value })}
+          onChange={(e) => setStudentData({ ...studentData, programme: e.target.value })}
         />
       </div>
-      
-      <h3 className="text-lg font-semibold mb-2">Course Marks</h3>
-      
-      <div className="overflow-x-auto">
-        <table className="w-full border text-sm">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="border px-2 py-1" rowSpan="2">Course Code</th>
-              <th className="border px-2 py-1" rowSpan="2">Course Title</th>
-              <th className="border px-2 py-1" colSpan="3">Internal Assessment</th>
-              <th className="border px-2 py-1" colSpan="3">Semester End Examination</th>
-            </tr>
-            <tr className="bg-gray-200">
-              <th className="border px-2 py-1">Max</th>
-              <th className="border px-2 py-1">Min</th>
-              <th className="border px-2 py-1">Obt</th>
-              <th className="border px-2 py-1">Max</th>
-              <th className="border px-2 py-1">Min</th>
-              <th className="border px-2 py-1">Obt</th>
-            </tr>
-          </thead>
-          <tbody>
-            {studentData.subjects.map((subject, index) => (
-              <>
-                <tr key={`theory-${index}`}>
-                  <td className="border px-2 py-1">{subject.code}</td>
-                  <td className="border px-2 py-1">{subject.title}</td>
-                  <td className="border px-2 py-1 text-center">{subject.internalMax}</td>
-                  <td className="border px-2 py-1 text-center">{subject.internalMin}</td>
-                  <td className="border px-2 py-1">
-                    <input
-                      type="number"
-                      className="w-full p-1 border"
-                      min="0"
-                      max={subject.internalMax}
-                      onChange={(e) => handleInputChange(e, index, "internalObt")}
-                    />
-                  </td>
-                  <td className="border px-2 py-1 text-center">{subject.theoryMax}</td>
-                  <td className="border px-2 py-1 text-center">{subject.theoryMin}</td>
-                  <td className="border px-2 py-1">
-                    <input
-                      type="number"
-                      className="w-full p-1 border"
-                      min="0"
-                      max={subject.theoryMax}
-                      onChange={(e) => handleInputChange(e, index, "theoryObt")}
-                    />
-                  </td>
-                </tr>
-                <tr key={`practical-${index}`}>
-                  <td className="border px-2 py-1">{subject.practicalCode}</td>
-                  <td className="border px-2 py-1">{subject.practicalTitle}</td>
-                  <td className="border px-2 py-1 text-center">{subject.practicalInternalMax}</td>
-                  <td className="border px-2 py-1 text-center">{subject.practicalInternalMin}</td>
-                  <td className="border px-2 py-1">
-                    <input
-                      type="number"
-                      className="w-full p-1 border"
-                      min="0"
-                      max={subject.practicalInternalMax}
-                      onChange={(e) => handleInputChange(e, index, "InternalObt", true)}
-                    />
-                  </td>
-                  <td className="border px-2 py-1 text-center">{subject.practicalMax}</td>
-                  <td className="border px-2 py-1 text-center">{subject.practicalMin}</td>
-                  <td className="border px-2 py-1">
-                    <input
-                      type="number"
-                      className="w-full p-1 border"
-                      min="0"
-                      max={subject.practicalMax}
-                      onChange={(e) => handleInputChange(e, index, "Obt", true)}
-                    />
-                  </td>
-                </tr>
-              </>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      
-      <div className="mt-4">
-        <button
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded font-medium"
-          onClick={handleSubmit}
+      <div>
+        <label className="block text-sm font-medium mb-1">Semester</label>
+        <select
+          value={selectedSemester}
+          onChange={handleSemesterChange}
+          className="w-full p-2 border rounded"
         >
-          Generate Marksheet
-        </button>
+          <option value="I">Semester I</option>
+          <option value="II">Semester II</option>
+          <option value="III">Semester III</option>
+          <option value="IV">Semester IV</option>
+          <option value="V">Semester V</option>
+          <option value="VI">Semester VI</option>
+        </select>
       </div>
-      
-      {studentData.totalMarksObtained > 0 && (
-        <div className="mt-6 p-4 border rounded-lg">
-          <h3 className="text-xl font-semibold mb-2">Results Summary</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <p><strong>Total Marks:</strong> {studentData.totalMarksObtained}/{studentData.totalMarksMax}</p>
-              <p><strong>Percentage:</strong> {studentData.percentageObtained}%</p>
-            </div>
-            <div>
-              <p><strong>SGPA:</strong> {studentData.sgpa}</p>
-              <p><strong>CGPA:</strong> {studentData.cgpa}</p>
-            </div>
-            <div>
-              <p><strong>Credit Earned:</strong> {studentData.creditEarned}</p>
-              <p><strong>Remarks:</strong> {studentData.remarks}</p>
-            </div>
+    </div>
+    
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+      <div>
+        <label className="block text-sm font-medium mb-1">Student Name</label>
+        <input
+          type="text"
+          placeholder="Student Name"
+          className="w-full p-2 border rounded"
+          onChange={(e) => setStudentData({ ...studentData, name: e.target.value })}
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium mb-1">PRN</label>
+        <input
+          type="text"
+          placeholder="PRN"
+          className="w-full p-2 border rounded"
+          onChange={(e) => setStudentData({ ...studentData, prn: e.target.value })}
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium mb-1">Student PIN</label>
+        <input
+          type="text"
+          placeholder="Student PIN"
+          className="w-full p-2 border rounded"
+          onChange={(e) => setStudentData({ ...studentData, studentPin: e.target.value })}
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium mb-1">Seat No.</label>
+        <input
+          type="text"
+          placeholder="Seat No."
+          className="w-full p-2 border rounded"
+          onChange={(e) => setStudentData({ ...studentData, seatNo: e.target.value })}
+        />
+      </div>
+    </div>
+    
+    <div className="mb-4">
+      <label className="block text-sm font-medium mb-1">Month & Year of Exam</label>
+      <input
+        type="text"
+        placeholder="e.g. MAR-23"
+        className="w-full p-2 border rounded"
+        onChange={(e) => setStudentData({ ...studentData, monthYear: e.target.value })}
+      />
+    </div>
+    
+    <h3 className="text-lg font-semibold mb-2">Course Marks</h3>
+    
+    <div className="overflow-x-auto">
+      <table className="w-full border text-sm">
+        <thead>
+          <tr className="bg-gray-200">
+            <th className="border px-2 py-1" rowSpan="2">Course Code</th>
+            <th className="border px-2 py-1" rowSpan="2">Course Title</th>
+            <th className="border px-2 py-1" colSpan="3">Internal Assessment</th>
+            <th className="border px-2 py-1" colSpan="3">Semester End Examination</th>
+          </tr>
+          <tr className="bg-gray-200">
+            <th className="border px-2 py-1">Max</th>
+            <th className="border px-2 py-1">Min</th>
+            <th className="border px-2 py-1">Obt</th>
+            <th className="border px-2 py-1">Max</th>
+            <th className="border px-2 py-1">Min</th>
+            <th className="border px-2 py-1">Obt</th>
+          </tr>
+        </thead>
+        <tbody>
+          {studentData.subjects.map((subject, index) => (
+            <>
+              <tr key={`theory-${index}`}>
+                <td className="border px-2 py-1">{subject.code}</td>
+                <td className="border px-2 py-1">{subject.title}</td>
+                <td className="border px-2 py-1 text-center">{subject.internalMax}</td>
+                <td className="border px-2 py-1 text-center">{subject.internalMin}</td>
+                <td className="border px-2 py-1">
+                  <input
+                    type="number"
+                    className="w-full p-1 border"
+                    min="0"
+                    max={subject.internalMax}
+                    onChange={(e) => handleInputChange(e, index, "internalObt")}
+                    onBlur={(e) => validateMarks(e, subject.internalMax)}
+                    onKeyPress={(e) => {
+                      if (e.key === '-') e.preventDefault();
+                    }}
+                  />
+                </td>
+                <td className="border px-2 py-1 text-center">{subject.theoryMax}</td>
+                <td className="border px-2 py-1 text-center">{subject.theoryMin}</td>
+                <td className="border px-2 py-1">
+                  <input
+                    type="number"
+                    className="w-full p-1 border"
+                    min="0"
+                    max={subject.theoryMax}
+                    onChange={(e) => handleInputChange(e, index, "theoryObt")}
+                    onBlur={(e) => validateMarks(e, subject.theoryMax)}
+                    onKeyPress={(e) => {
+                      if (e.key === '-') e.preventDefault();
+                    }}
+                  />
+                </td>
+              </tr>
+              <tr key={`practical-${index}`}>
+                <td className="border px-2 py-1">{subject.practicalCode}</td>
+                <td className="border px-2 py-1">{subject.practicalTitle}</td>
+                <td className="border px-2 py-1 text-center">{subject.practicalInternalMax}</td>
+                <td className="border px-2 py-1 text-center">{subject.practicalInternalMin}</td>
+                <td className="border px-2 py-1">
+                  <input
+                    type="number"
+                    className="w-full p-1 border"
+                    min="0"
+                    max={subject.practicalInternalMax}
+                    onChange={(e) => handleInputChange(e, index, "practicalInternalObt")}
+                    onBlur={(e) => validateMarks(e, subject.practicalInternalMax)}
+                    onKeyPress={(e) => {
+                      if (e.key === '-') e.preventDefault();
+                    }}
+                  />
+                </td>
+                <td className="border px-2 py-1 text-center">{subject.practicalMax}</td>
+                <td className="border px-2 py-1 text-center">{subject.practicalMin}</td>
+                <td className="border px-2 py-1">
+                  <input
+                    type="number"
+                    className="w-full p-1 border"
+                    min="0" 
+                    max={subject.practicalMax}
+                    onChange={(e) => handleInputChange(e, index, "practicalObt")}
+                    onBlur={(e) => validateMarks(e, subject.practicalMax)}
+                    onKeyPress={(e) => {
+                      if (e.key === '-') e.preventDefault();
+                    }}
+                  />
+                </td>
+              </tr>
+            </>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    
+    <div className="mt-4">
+      <button
+        className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded font-medium"
+        onClick={handleSubmit}
+      >
+        Generate Marksheet
+      </button>
+    </div>
+    
+    {studentData.totalMarksObtained > 0 && (
+      <div className="mt-6 p-4 border rounded-lg">
+        <h3 className="text-xl font-semibold mb-2">Results Summary</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <p><strong>Total Marks:</strong> {studentData.totalMarksObtained}/{studentData.totalMarksMax}</p>
+            <p><strong>Percentage:</strong> {studentData.percentageObtained}%</p>
+          </div>
+          <div>
+            <p><strong>SGPA:</strong> {studentData.sgpa}</p>
+            <p><strong>CGPA:</strong> {studentData.cgpa}</p>
+          </div>
+          <div>
+            <p><strong>Credit Earned:</strong> {studentData.creditEarned}</p>
+            <p><strong>Remarks:</strong> {studentData.remarks}</p>
           </div>
         </div>
-      )}
-    </div>
-  </>;
+      </div>
+    )}
+  </div>
+</>;
 };
 
 export default AdminPage;
