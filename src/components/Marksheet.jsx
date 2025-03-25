@@ -1,6 +1,7 @@
 import { useRef } from "react";
+import college from "../assets/college.jpg"
 
-const Marksheet = ({ student }) => {
+const Marksheet = ({ student, logoSrc }) => {
   const marksheetRef = useRef(null);
   
   // Manual print function
@@ -29,7 +30,8 @@ const Marksheet = ({ student }) => {
               table, th, td { border: 1px solid #ddd; }
               th, td { padding: 8px; text-align: left; }
               th { background-color: #f2f2f2; }
-              .header { text-align: center; margin-bottom: 20px; }
+              .header { text-align: center; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; }
+              .header-logo { max-height: 100px; max-width: 150px; margin-right: 20px; }
               .student-info { margin-bottom: 15px; }
               .student-info p { margin: 5px 0; }
               .footer { margin-top: 30px; }
@@ -55,8 +57,17 @@ const Marksheet = ({ student }) => {
     <div className="bg-gray-100 p-4 rounded-lg mt-4">
       {/* Marksheet content for printing */}
       <div ref={marksheetRef} className="bg-white p-4">
-        <div className="text-center mb-4">
-          <h2 className="text-xl font-bold">Mulund College of commerce</h2>
+        <div className="header mb-4 flex gap-2">
+          {/* College Logo - with fallback placeholder */}
+          <img 
+            src={college}
+            alt="Mulund College of Commerce Logo" 
+            className="header-logo max-h-[50px] rounded-2xl"
+          />
+          <div>
+            <h2 className="text-xl font-bold">Mulund College of Commerce</h2>
+            <p className="text-sm">Affiliated to University of Mumbai</p>
+          </div>
         </div>
         
         <div className="mb-4">
